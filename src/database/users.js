@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const createUser = async (user) => {
   return await new Promise((resolve, reject) => {
-    const dbPath = path.join(__dirname, 'database.js');
+    const dbPath = path.join(__dirname, 'database.db');
     const db = new sqlite3.Database(dbPath);
     const {login, pass} = user;
     const query = "INSERT INTO users(login, password) VALUES (?, ?)";
@@ -12,7 +12,7 @@ const createUser = async (user) => {
         console.error(err);
         reject(err);
       } else {
-        resolve.this(this.lastID);
+        resolve(this.lastID);
       }
     });
     db.close();
