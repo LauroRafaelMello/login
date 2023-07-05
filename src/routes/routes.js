@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createUser, loginUser} = require('../database/users');
+const {createUser, loginUser, users} = require('../database/users');
 
 // this endpoint test the connection by terminal with server
 router.get('/', (req, res) => {
@@ -19,14 +19,23 @@ router.post('/signup', (req, res) => {
   });
 });
 
+// this endpoint get all users from database
+router.get('/users', (req, res) => {
+  users().then((rows) => {
+    if(rows) {
+      res.json(rows).status(200);
+    } else {
+      res.json({"status":"200", "message":"rows are missing!"});
+    }
+  })
+})
 
 // this endpoint receive login and password from frontend
 router.post('/signin', (req, res) => {
   const {login, pass} = req.body;
-  console.log(`Login: ${login}\n pass: ${pass}`);
   loginUser(login, pass).then((rows) => {
     if(rows) {
-      res.json({"status":"200", "message":"Login sucsess!"}).status(200);
+      res.json({"status":"200", "message":"Login succsess!"}).status(200);
     } else {
       res.json({"status":"401", "message":"Login or password is are incorrect!"}).status(401);
     };
